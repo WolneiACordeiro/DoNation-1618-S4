@@ -1,0 +1,33 @@
+{
+  "properties": [
+    {
+      "name": "spring.neo4j.username",
+      "type": "java.lang.String",
+      "description": "Description for spring.neo4j.username."
+    },
+    {
+      "name": "spring.neo4j.password",
+      "type": "java.lang.String",
+      "description": "Description for spring.neo4j.password."
+    },
+    {
+      "name": "spring.neo4j.initialization-mode",
+      "type": "java.lang.String",
+      "description": "Description for spring.neo4j.initialization-mode."
+    },
+    {
+      "name": "spring.neo4j.open-in-view",
+      "type": "java.lang.String",
+      "description": "Description for spring.neo4j.open-in-view."
+    },
+    {
+      "name": "spring.neo4j.repositories.enabled",
+      "type": "java.lang.String",
+      "description": "Description for spring.neo4j.repositories.enabled."
+    },
+    {
+      "name": "spring.neo4j.neo4j-extensions",
+      "type": "java.lang.String",
+      "description": "Description for spring.neo4j.neo4j-extensions."
+    }
+  ] }
