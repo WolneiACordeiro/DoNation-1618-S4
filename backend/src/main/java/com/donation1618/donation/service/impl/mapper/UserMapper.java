@@ -4,6 +4,8 @@ import com.donation1618.donation.domain.dto.UserDTO;
 import com.donation1618.donation.domain.entities.User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class UserMapper {
     public UserDTO entityToDto(User user) {
@@ -12,6 +14,7 @@ public class UserMapper {
         userDTO.setUsername(user.getUsername());
         userDTO.setEmail(user.getEmail());
         userDTO.setPassword(user.getPassword());
+        //userDTO.setRoles(user.getRoles());
         return userDTO;
     }
     public User dtoToEntity(UserDTO userDTO) {
@@ -20,6 +23,7 @@ public class UserMapper {
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
+        //user.setRoles(userDTO.getRoles());
         return user;
     }
 }
