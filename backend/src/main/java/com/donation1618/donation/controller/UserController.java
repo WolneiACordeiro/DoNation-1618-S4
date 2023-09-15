@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -21,6 +22,11 @@ public class UserController {
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
         UserDTO createdUserDTO = service.createUser(userDTO);
         return new ResponseEntity<>(createdUserDTO, HttpStatus.CREATED);
+    }
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId,@Valid @RequestBody UserDTO update) {
+        UserDTO updatedUser = service.updateUser(userId, update);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @GetMapping

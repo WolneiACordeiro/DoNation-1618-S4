@@ -14,7 +14,15 @@ public class UserMapper {
         userDTO.setUsername(user.getUsername());
         userDTO.setEmail(user.getEmail());
         userDTO.setPassword(user.getPassword());
-        //userDTO.setRoles(user.getRoles());
+        return userDTO;
+    }
+    public UserDTO entityWithRolesToDto(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setRoles(user.getRoles());
         return userDTO;
     }
     public User dtoToEntity(UserDTO userDTO) {
@@ -23,7 +31,6 @@ public class UserMapper {
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
-        //user.setRoles(userDTO.getRoles());
         return user;
     }
 }

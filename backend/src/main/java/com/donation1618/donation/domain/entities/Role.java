@@ -13,7 +13,8 @@ public class Role {
     @GeneratedValue
     private Long roleId;
     private Roles name;
-
+    public Role() {
+    }
     public Role(Roles name) {
         this.name = name;
     }
