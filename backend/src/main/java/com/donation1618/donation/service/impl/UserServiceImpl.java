@@ -1,12 +1,14 @@
 package com.donation1618.donation.service.impl;
 
 import com.donation1618.donation.domain.dto.UserDTO;
+import com.donation1618.donation.domain.dto.UserUpdateDTO;
 import com.donation1618.donation.domain.entities.Role;
 import com.donation1618.donation.domain.entities.Roles;
 import com.donation1618.donation.domain.entities.User;
 import com.donation1618.donation.repository.RoleRepository;
 import com.donation1618.donation.repository.UserRepository;
 import com.donation1618.donation.service.UserService;
+import com.donation1618.donation.service.exceptions.EmailAlreadyExistsException;
 import com.donation1618.donation.service.exceptions.ResourceNotFoundException;
 import com.donation1618.donation.service.impl.mapper.UserMapper;
 import lombok.ToString;
@@ -24,10 +26,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository repository;
     @Autowired
     private RoleRepository roleRepository;
-
     @Autowired
     private UserMapper userMapper;
-
     @Override
     @Transactional
     public UserDTO createUser(UserDTO userDTO) {
@@ -43,22 +43,23 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     @Transactional
-    public UserDTO updateUser(Long userId, UserDTO updatedUserDTO) {
-        User existingUser = repository.findById(userId)
+    public UserDTO updateUser(Long userId, UserUpdateDTO userUpdateDTO) {
+        User user = repository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com o ID: " + userId));
-
-        if (updatedUserDTO.getUsername() != null) {
-            existingUser.setUsername(updatedUserDTO.getUsername());
+        String newEmail = userUpdateDTO.getEmail();
+        String currentEmail = user.getEmail();
+        if (!newEmail.equals(currentEmail)) {
+            Boolean existingUser = repository.existsByEmail(newEmail);
+            if (existingUser != false) {
+                throw new EmailAlreadyExistsException("O email '" + newEmail + "' já está em uso por outro usuário.");
+            }
         }
-        if (updatedUserDTO.getEmail() != null) {
-            existingUser.setEmail(updatedUserDTO.getEmail());
-        }
-        if (updatedUserDTO.getPassword() != null) {
-            existingUser.setPassword(updatedUserDTO.getPassword());
-        }
-        if (updatedUserDTO.getRoles() != null && !updatedUserDTO.getRoles().isEmpty()) {
+        user.setUsername(userUpdateDTO.getUsername());
+        user.setEmail(newEmail);
+        user.setPassword(userUpdateDTO.getPassword());
+        if (userUpdateDTO.getRoles() != null && !userUpdateDTO.getRoles().isEmpty()) {
             List<Role> updatedRoles = new ArrayList<>();
-            for (Role roleDTO : updatedUserDTO.getRoles()) {
+            for (Role roleDTO : userUpdateDTO.getRoles()) {
                 Roles roleName = roleDTO.getName();
                 Roles roleEnum = roleName;
                 Role role = roleRepository.findByName(roleEnum.name());
@@ -68,10 +69,9 @@ public class UserServiceImpl implements UserService {
                 }
                 updatedRoles.add(role);
             }
-            existingUser.setRoles(updatedRoles);
+            user.setRoles(updatedRoles);
         }
-
-        User updatedUser = repository.save(existingUser);
+        User updatedUser = repository.save(user);
         return userMapper.entityWithRolesToDto(updatedUser);
     }
     @Override

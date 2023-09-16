@@ -3,6 +3,7 @@ package com.donation1618.donation.controller.handlers;
 import com.donation1618.donation.domain.dto.errors.CustomError;
 import com.donation1618.donation.domain.dto.errors.ValidationError;
 import com.donation1618.donation.service.exceptions.DatabaseException;
+import com.donation1618.donation.service.exceptions.EmailAlreadyExistsException;
 import com.donation1618.donation.service.exceptions.ForbiddenException;
 import com.donation1618.donation.service.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,12 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<CustomError> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
+        CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<CustomError> emailAlreadyExists(EmailAlreadyExistsException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
