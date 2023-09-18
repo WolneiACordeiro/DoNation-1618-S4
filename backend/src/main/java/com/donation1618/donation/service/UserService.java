@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface UserService {
     UserDTO createUser(UserDTO userDTO);
-    UserDTO updateUser(Long userId, UserUpdateDTO userUpdateDTO);
-    public void deleteUser(Long userId);
+    UserDTO updateUser(String userId, UserUpdateDTO userUpdateDTO);
+    public void deleteUser(String userId);
     List<UserDTO> getAllUsers();
 }

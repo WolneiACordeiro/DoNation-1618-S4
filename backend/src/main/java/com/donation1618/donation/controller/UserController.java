@@ -24,7 +24,7 @@ public class UserController {
         return new ResponseEntity<>(createdUserDTO, HttpStatus.CREATED);
     }
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId,@Valid @RequestBody UserUpdateDTO update) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable String userId,@Valid @RequestBody UserUpdateDTO update) {
         UserDTO updatedUser = service.updateUser(userId, update);
         return ResponseEntity.ok(updatedUser);
     }
@@ -34,7 +34,7 @@ public class UserController {
         return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
         service.deleteUser(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -5,25 +5,14 @@ import com.donation1618.donation.domain.entities.User;
 import com.donation1618.donation.utils.ExternalIdGenerator;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
-public class UserMapper {
+public class GroupMapper {
     public UserDTO entityToDto(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
         userDTO.setEmail(user.getEmail());
         userDTO.setPassword(user.getPassword());
-        return userDTO;
-    }
-    public UserDTO entityWithRolesToDto(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setPassword(user.getPassword());
-        userDTO.setRoles(user.getRoles());
         return userDTO;
     }
     public User dtoToEntity(UserDTO userDTO) {
