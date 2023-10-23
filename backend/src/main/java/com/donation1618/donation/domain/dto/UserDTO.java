@@ -5,19 +5,22 @@ import com.donation1618.donation.utils.validator.UniqueEmail;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.*;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    private String id;
+    private UUID id;
     @NotBlank(message = "Campo requerido")
     @Size(min = 3, max = 80, message = "O nome de usuário deve ter de 3 a 80 caracteres")
     private String username;

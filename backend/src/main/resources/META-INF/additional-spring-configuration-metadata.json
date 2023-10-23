@@ -29,5 +29,10 @@
       "name": "spring.neo4j.neo4j-extensions",
       "type": "java.lang.String",
       "description": "Description for spring.neo4j.neo4j-extensions."
+    },
+    {
+      "name": "neo4j.clear-database-on-start",
+      "type": "java.lang.String",
+      "description": "Description for neo4j.clear-database-on-start."
     }
   ] }

@@ -14,11 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.UUID;
 
 @Service
 public class GroupServiceImpl implements GroupService {
-private final GroupRepository groupRepository;
-private final UserRepository userRepository;
+    private final GroupRepository groupRepository;
+    private final UserRepository userRepository;
+    private final RelationshipGroupMemberOfRepository relationshipGroupMemberOfRepository;
 
     @Autowired
     public GroupServiceImpl(GroupRepository groupRepository, UserRepository userRepository, RelationshipGroupMemberOfRepository relationshipGroupMemberOfRepository) {
@@ -29,14 +31,14 @@ private final UserRepository userRepository;
 
     @Override
     @Transactional
-    public Group createGroup(Group group, String userId) {
+    public Group createGroup(Group group, UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com o ID: " + userId));
-        group.setId(ExternalIdGenerator.generateUniqueId());
+        group.setId(UUID.randomUUID());
         group.setName(group.getName());
         RelationshipGroupMemberOf relationship = new RelationshipGroupMemberOf();
         relationship.setRole("admin");
         relationship.setGroup(group);
-        user.setRelationshipGroupMemberOf(relationship);
+        user.addGroupMembership(relationship);
         userRepository.save(user);
         Group saveGroup = groupRepository.save(group);
         return saveGroup;

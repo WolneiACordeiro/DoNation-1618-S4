@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.dtoToEntity(userDTO);
         Role role = roleRepository.findByName(RoleEnum.ROLE_USER.name());
         if (role == null) {
-            role = new Role(ExternalIdGenerator.generateUniqueId(),RoleEnum.ROLE_USER);
+            role = new Role(RoleEnum.ROLE_USER);
             role = roleRepository.save(role);
         }
         user.setRoles(Collections.singletonList(role));
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     @Transactional
-    public UserDTO updateUser(String userId, UserUpdateDTO userUpdateDTO) {
+    public UserDTO updateUser(UUID userId, UserUpdateDTO userUpdateDTO) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com o ID: " + userId));
         String newEmail = userUpdateDTO.getEmail();
@@ -70,7 +71,7 @@ public class UserServiceImpl implements UserService {
                 RoleEnum roleEnum = roleName;
                 Role role = roleRepository.findByName(roleEnum.name());
                 if (role == null) {
-                    role = new Role(ExternalIdGenerator.generateUniqueId(),roleEnum);
+                    role = new Role(roleEnum);
                     role = roleRepository.save(role);
                 }
                 updatedRoles.add(role);
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public void deleteUser(String userId) {
+    public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);
     }
     @Override

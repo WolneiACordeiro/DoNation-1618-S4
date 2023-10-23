@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -24,7 +25,7 @@ public class UserController {
         return new ResponseEntity<>(createdUserDTO, HttpStatus.CREATED);
     }
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable String userId,@Valid @RequestBody UserUpdateDTO update) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable UUID userId, @Valid @RequestBody UserUpdateDTO update) {
         UserDTO updatedUser = service.updateUser(userId, update);
         return ResponseEntity.ok(updatedUser);
     }
@@ -34,7 +35,7 @@ public class UserController {
         return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID userId) {
         service.deleteUser(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

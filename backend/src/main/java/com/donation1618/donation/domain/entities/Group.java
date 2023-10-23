@@ -1,15 +1,24 @@
 package com.donation1618.donation.domain.entities;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
-@Data
+
+import java.util.UUID;
+
+@AllArgsConstructor
+@Getter
+@Setter
 @Node("Group")
 public class Group {
     @Id
-    private String id;
+    @GeneratedValue
+    private UUID id;
     private String name;
-    @Relationship(type = "MEMBER_OF", direction = Relationship.Direction.OUTGOING)
-    private RelationshipGroupMemberOf relationshipGroupMemberOf;
+    public Group() {
+        this.id = UUID.randomUUID();
+    }
 }

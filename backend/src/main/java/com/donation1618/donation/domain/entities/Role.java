@@ -6,6 +6,9 @@ import lombok.*;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,7 +17,12 @@ import org.springframework.data.neo4j.core.schema.Node;
 @Node("Role")
 public class Role {
     @Id
-    private String id;
+    @GeneratedValue
+    private UUID id;
     @NotBlank
     private RoleEnum name;
+    public Role(RoleEnum name) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+    }
 }
