@@ -17,7 +17,6 @@ import java.util.UUID;
 @Node("Role")
 public class Role {
     @Id
-    @GeneratedValue
     private UUID id;
     @NotBlank
     private RoleEnum name;

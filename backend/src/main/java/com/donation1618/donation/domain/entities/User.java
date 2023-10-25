@@ -17,7 +17,6 @@ import java.util.UUID;
 @Node("User")
 public class User {
     @Id
-    @GeneratedValue
     private UUID id;
     private String username;
     private String email;
@@ -27,7 +26,7 @@ public class User {
     @Relationship(type = "MEMBER_OF", direction = Relationship.Direction.OUTGOING)
     private List<RelationshipGroupMemberOf> groupMemberships = new ArrayList<>();
     public void addGroupMembership(RelationshipGroupMemberOf membership) {
-        groupMemberships.add(membership);
+            groupMemberships.add(membership);
     }
     public User() {
         this.id = UUID.randomUUID();

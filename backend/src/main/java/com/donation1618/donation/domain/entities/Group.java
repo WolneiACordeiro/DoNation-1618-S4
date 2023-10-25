@@ -9,15 +9,19 @@ import org.springframework.data.neo4j.core.schema.Node;
 
 import java.util.UUID;
 
-@AllArgsConstructor
 @Getter
 @Setter
 @Node("Group")
 public class Group {
     @Id
-    @GeneratedValue
     private UUID id;
     private String name;
+
+    public Group(UUID id, String name) {
+        this.id = UUID.randomUUID();
+        this.name = name;
+    }
+
     public Group() {
         this.id = UUID.randomUUID();
     }
