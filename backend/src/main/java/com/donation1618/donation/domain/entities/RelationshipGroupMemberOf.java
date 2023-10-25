@@ -17,11 +17,13 @@ import java.util.UUID;
 public class RelationshipGroupMemberOf {
     @RelationshipId
     private String id;
+    private UUID relationId;
     private GroupHierarchyEnum role;
     @TargetNode
     private Group group;
 
-    public RelationshipGroupMemberOf(GroupHierarchyEnum role, Group group) {
+    public RelationshipGroupMemberOf(UUID relationId,GroupHierarchyEnum role, Group group) {
+        this.relationId = UUID.randomUUID();
         this.role = role;
         this.group = group;
     }

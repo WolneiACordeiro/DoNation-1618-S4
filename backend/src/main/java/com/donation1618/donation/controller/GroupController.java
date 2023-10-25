@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -22,6 +23,11 @@ public class GroupController {
     @PostMapping("/create/{userId}")
     public ResponseEntity<Group> createGroup(@RequestBody Group group, @PathVariable UUID userId) {
         Group groupCreated = groupService.createGroup(group, userId);
+        return new ResponseEntity<>(groupCreated, HttpStatus.CREATED);
+    }
+    @PostMapping("/join/{groupId}/{userId}")
+    public ResponseEntity<Group> joinGroup(@PathVariable UUID groupId, @PathVariable UUID userId) {
+        Group groupCreated = groupService.joinGroup(groupId, userId);
         return new ResponseEntity<>(groupCreated, HttpStatus.CREATED);
     }
 }
