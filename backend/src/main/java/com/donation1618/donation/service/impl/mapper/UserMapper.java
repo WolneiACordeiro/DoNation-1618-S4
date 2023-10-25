@@ -6,6 +6,7 @@ import com.donation1618.donation.utils.ExternalIdGenerator;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class UserMapper {
@@ -28,7 +29,7 @@ public class UserMapper {
     }
     public User dtoToEntity(UserDTO userDTO) {
         User user = new User();
-        user.setId(userDTO.getId());
+        user.setId(UUID.randomUUID());
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());

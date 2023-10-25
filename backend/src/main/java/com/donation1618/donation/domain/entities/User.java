@@ -25,9 +25,14 @@ public class User {
     private List<Role> roles = new ArrayList<>();
     @Relationship(type = "MEMBER_OF", direction = Relationship.Direction.OUTGOING)
     private List<RelationshipGroupMemberOf> groupMemberships = new ArrayList<>();
+    //@Relationship(type = "WANT_JOIN", direction = Relationship.Direction.OUTGOING)
+    //private List<RelationshipGroupWantJoin> groupWantJoins = new ArrayList<>();
     public void addGroupMembership(RelationshipGroupMemberOf membership) {
             groupMemberships.add(membership);
     }
+    //public void addGroupJoin(RelationshipGroupWantJoin wantJoin) {
+        //groupWantJoins.add(wantJoin);
+    //}
     public User() {
         this.id = UUID.randomUUID();
     }
