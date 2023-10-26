@@ -1,25 +1,30 @@
 package com.donation1618.donation.controller;
 
 import com.donation1618.donation.domain.dto.GroupDTO;
+import com.donation1618.donation.domain.dto.UserRelationsDTO;
 import com.donation1618.donation.domain.entities.RelationshipGroupWantJoin;
 import com.donation1618.donation.domain.entities.User;
+import com.donation1618.donation.domain.entities.enums.JoinGroupStatusEnum;
 import com.donation1618.donation.repository.UserRepository;
 import com.donation1618.donation.service.GroupService;
+import com.donation1618.donation.service.impl.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/groups")
 public class GroupController {
     private final GroupService groupService;
-
+    @Autowired
+    private UserMapper userMapper;
     @Autowired
     private UserRepository relationJoinRepository;
+
 
     public void RelationshipGroupController(UserRepository relationJoinRepository) {
         this.relationJoinRepository = relationJoinRepository;
@@ -48,8 +53,19 @@ public class GroupController {
         return new ResponseEntity<>(groupCreated, HttpStatus.OK);
     }
 
-    @GetMapping("/{relationId}")
-    public List<User> getRelationshipByRelationId(@PathVariable String relationId) {
-        return relationJoinRepository.findAll();
+    @GetMapping("/{id}")
+    public UserRelationsDTO getRelationshipByRelationId(@PathVariable UUID id) {
+        Optional<User> userOptional = relationJoinRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            UserRelationsDTO userDTO = userMapper.entityOnlyRelationsDto(user);
+            if (!userDTO.getGroupWantJoins().isEmpty()) {
+                RelationshipGroupWantJoin userGroupWantJoin = userDTO.getGroupWantJoins().get(0);
+                userGroupWantJoin.setStatus(JoinGroupStatusEnum.ACCEPTED);
+                relationJoinRepository.save(user);
+            }
+            return userDTO;
+        }
+        return null;
     }
 }

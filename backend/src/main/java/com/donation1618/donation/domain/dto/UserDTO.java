@@ -1,5 +1,7 @@
 package com.donation1618.donation.domain.dto;
 
+import com.donation1618.donation.domain.entities.RelationshipGroupMemberOf;
+import com.donation1618.donation.domain.entities.RelationshipGroupWantJoin;
 import com.donation1618.donation.domain.entities.Role;
 import com.donation1618.donation.utils.validator.UniqueEmail;
 import jakarta.validation.constraints.Email;
@@ -31,4 +33,6 @@ public class UserDTO {
     @Size(min = 8, max = 16, message = "A senha deve ter de 8 a 16 caracteres")
     private String password;
     private List<Role> roles = new ArrayList<>();
+    private List<RelationshipGroupMemberOf> groupMemberships = new ArrayList<>();
+    private List<RelationshipGroupWantJoin> groupWantJoins = new ArrayList<>();
 }

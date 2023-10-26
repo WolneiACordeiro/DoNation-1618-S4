@@ -1,6 +1,7 @@
 package com.donation1618.donation.service.impl.mapper;
 
 import com.donation1618.donation.domain.dto.UserDTO;
+import com.donation1618.donation.domain.dto.UserRelationsDTO;
 import com.donation1618.donation.domain.entities.User;
 import com.donation1618.donation.utils.ExternalIdGenerator;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,12 @@ public class UserMapper {
         userDTO.setEmail(user.getEmail());
         userDTO.setPassword(user.getPassword());
         userDTO.setRoles(user.getRoles());
+        return userDTO;
+    }
+    public UserRelationsDTO entityOnlyRelationsDto(User user) {
+        UserRelationsDTO userDTO = new UserRelationsDTO();
+        userDTO.setId(user.getId());
+        userDTO.setGroupWantJoins(user.getGroupWantJoins());
         return userDTO;
     }
     public User dtoToEntity(UserDTO userDTO) {
