@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -53,19 +55,29 @@ public class GroupController {
         return new ResponseEntity<>(groupCreated, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public UserRelationsDTO getRelationshipByRelationId(@PathVariable UUID id) {
+    @GetMapping("/{id}/{groupId}")
+    public UserRelationsDTO getRelationshipByRelationId(@PathVariable UUID id, @PathVariable UUID groupId) {
         Optional<User> userOptional = relationJoinRepository.findById(id);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             UserRelationsDTO userDTO = userMapper.entityOnlyRelationsDto(user);
-            if (!userDTO.getGroupWantJoins().isEmpty()) {
-                RelationshipGroupWantJoin userGroupWantJoin = userDTO.getGroupWantJoins().get(0);
-                userGroupWantJoin.setStatus(JoinGroupStatusEnum.ACCEPTED);
-                relationJoinRepository.save(user);
+            List<RelationshipGroupWantJoin> groupWantJoins = userDTO.getGroupWantJoins();
+            List<RelationshipGroupWantJoin> filteredGroupWantJoins = new ArrayList<>();
+            for (RelationshipGroupWantJoin groupWantJoin : groupWantJoins) {
+//                if (!userDTO.getGroupWantJoins().isEmpty()) {
+//                    RelationshipGroupWantJoin userGroupWantJoin = userDTO.getGroupWantJoins().get(0);
+//                    userGroupWantJoin.setStatus(JoinGroupStatusEnum.ACCEPTED);
+//                    relationJoinRepository.save(user);
+//                }
+                if (JoinGroupStatusEnum.WAITING.equals(groupWantJoin.getStatus()) && groupId.equals(groupWantJoin.getGroup().getId())) {
+                    groupWantJoin.setStatus(JoinGroupStatusEnum.WAITING);
+                    filteredGroupWantJoins.add(groupWantJoin);
+                }
             }
+            userDTO.setGroupWantJoins(filteredGroupWantJoins);
             return userDTO;
         }
         return null;
     }
+
 }
