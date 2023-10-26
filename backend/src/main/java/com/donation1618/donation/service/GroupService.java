@@ -1,10 +1,12 @@
 package com.donation1618.donation.service;
 
-import com.donation1618.donation.domain.entities.Group;
+import com.donation1618.donation.domain.dto.GroupDTO;
+import com.donation1618.donation.domain.entities.RelationshipGroupWantJoin;
 
 import java.util.UUID;
 
 public interface GroupService {
-    Group createGroup(Group group, UUID userId);
-    public Group joinGroup(UUID groupId, UUID userId);
+    GroupDTO createGroup(GroupDTO groupDTO, UUID userId);
+    RelationshipGroupWantJoin joinGroup(UUID groupId, UUID userId);
+    RelationshipGroupWantJoin acceptGroup(UUID groupId, UUID userId);
 }

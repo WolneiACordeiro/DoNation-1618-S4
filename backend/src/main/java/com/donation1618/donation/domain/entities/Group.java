@@ -21,7 +21,6 @@ public class Group {
         this.id = UUID.randomUUID();
         this.name = name;
     }
-
     public Group() {
         this.id = UUID.randomUUID();
     }

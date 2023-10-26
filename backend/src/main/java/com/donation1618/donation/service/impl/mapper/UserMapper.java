@@ -29,7 +29,6 @@ public class UserMapper {
     }
     public User dtoToEntity(UserDTO userDTO) {
         User user = new User();
-        user.setId(UUID.randomUUID());
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
