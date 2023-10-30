@@ -35,9 +35,4 @@ public interface UserRepository extends Neo4jRepository<User, UUID> {
             "WHERE r.relationId = $relationId " +
             "RETURN r LIMIT 1")
     RelationshipGroupWantJoin findByRelationId(String relationId);
-
-    @Query("MATCH (user:User)-[r:WANT_JOIN]->(group:Group) " +
-            "WHERE r.relationId = $relationId " +
-            "RETURN r LIMIT 1")
-    List<User> findByRelationIdTESTE(String relationId);
 }

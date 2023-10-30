@@ -50,30 +50,9 @@ public class GroupController {
     }
 
     @PostMapping("/accept/{groupId}/{userId}")
-    public ResponseEntity<RelationshipGroupWantJoin> acceptGroup(@PathVariable UUID groupId, @PathVariable UUID userId) {
-        RelationshipGroupWantJoin groupCreated = groupService.acceptGroup(groupId, userId);
-        return new ResponseEntity<>(groupCreated, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}/{groupId}")
-    public UserRelationsDTO getRelationshipByRelationId(@PathVariable UUID id, @PathVariable UUID groupId) {
-        Optional<User> userOptional = relationJoinRepository.findById(id);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            UserRelationsDTO userDTO = userMapper.entityOnlyRelationsDto(user);
-            List<RelationshipGroupWantJoin> groupWantJoins = userDTO.getGroupWantJoins();
-            List<RelationshipGroupWantJoin> filteredGroupWantJoins = new ArrayList<>();
-            for (RelationshipGroupWantJoin groupWantJoin : groupWantJoins) {
-                if (JoinGroupStatusEnum.WAITING.equals(groupWantJoin.getStatus()) && groupId.equals(groupWantJoin.getGroup().getId())) {
-                    groupWantJoin.setStatus(JoinGroupStatusEnum.ACCEPTED);
-                    filteredGroupWantJoins.add(groupWantJoin);
-                    relationJoinRepository.save(user);
-                }
-            }
-            userDTO.setGroupWantJoins(filteredGroupWantJoins);
-            return userDTO;
-        }
-        return null;
+    public ResponseEntity<UserRelationsDTO> acceptGroup(@PathVariable UUID groupId, @PathVariable UUID userId) {
+        UserRelationsDTO joinAccepted = groupService.acceptGroup(groupId, userId);
+        return new ResponseEntity<>(joinAccepted, HttpStatus.ACCEPTED);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.donation1618.donation.service.impl;
 
 import com.donation1618.donation.domain.dto.GroupDTO;
+import com.donation1618.donation.domain.dto.UserRelationsDTO;
 import com.donation1618.donation.domain.entities.Group;
 import com.donation1618.donation.domain.entities.RelationshipGroupMemberOf;
 import com.donation1618.donation.domain.entities.RelationshipGroupWantJoin;
@@ -14,26 +15,25 @@ import com.donation1618.donation.service.GroupService;
 import com.donation1618.donation.service.exceptions.ForbiddenException;
 import com.donation1618.donation.service.exceptions.ResourceNotFoundException;
 import com.donation1618.donation.service.impl.mapper.GroupMapper;
+import com.donation1618.donation.service.impl.mapper.UserMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
-    private final RelationshipGroupWantJoinRepository relationJoinRepository;
     private final GroupMapper groupMapper;
+    private final UserMapper userMapper;
     @Autowired
-    public GroupServiceImpl(GroupRepository groupRepository, UserRepository userRepository, GroupMapper groupMapper, RelationshipGroupWantJoinRepository relationJoinRepository) {
+    public GroupServiceImpl(GroupRepository groupRepository, UserRepository userRepository, GroupMapper groupMapper, UserMapper userMapper, RelationshipGroupWantJoinRepository relationJoinRepository) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
         this.groupMapper = groupMapper;
-        this.relationJoinRepository = relationJoinRepository;
+        this.userMapper = userMapper;
     }
     @Override
     @Transactional
@@ -66,33 +66,32 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     @Transactional
-    public RelationshipGroupWantJoin acceptGroup(UUID groupId, UUID userId) {
+    public UserRelationsDTO acceptGroup(UUID groupId, UUID userId) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new ResourceNotFoundException("Grupo não encontrado com o ID: " + groupId));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com o ID: " + userId));
-        if (userRepository.hasRecentWantJoin(userId, groupId)) {
-            String status = userRepository.findMostRecentWantJoinStatus(userId, groupId);
-            System.out.println("Status: " + status);
-            if (Objects.equals(status, "WAITING")) {
-                UUID relationId = userRepository.findWantJoinRelationId(userId, groupId);
-                if (relationId != null) {
-                    RelationshipGroupWantJoin relationship = userRepository.findByRelationId(relationId.toString());
-                    if (relationship != null) {
-                        relationship.setStatus(JoinGroupStatusEnum.ACCEPTED);
-                        user.addGroupJoin(relationship);
-                        userRepository.save(user);
-                        groupRepository.save(group);
-                        return relationship;
-                    } else {
-                        throw new ResourceNotFoundException("Relacionamento não encontrado com relationId: " + relationId);
-                    }
-                } else {
-                    throw new ResourceNotFoundException("relationId não encontrado para userId: " + userId + " e groupId: " + groupId);
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com o ID: " + userId)));
+
+        User user = userOptional.get();
+        UserRelationsDTO userDTO = userMapper.entityOnlyRelationsDto(user);
+        List<RelationshipGroupWantJoin> groupWantJoins = userDTO.getGroupWantJoins();
+        if(!groupWantJoins.isEmpty()){
+            List<RelationshipGroupWantJoin> filteredGroupWantJoins = new ArrayList<>();
+            for (RelationshipGroupWantJoin groupWantJoin : groupWantJoins) {
+                if (JoinGroupStatusEnum.WAITING.equals(groupWantJoin.getStatus()) && groupId.equals(groupWantJoin.getGroup().getId())) {
+                    groupWantJoin.setStatus(JoinGroupStatusEnum.ACCEPTED);
+                    filteredGroupWantJoins.add(groupWantJoin);
                 }
+            }
+            if(!filteredGroupWantJoins.isEmpty()){
+                userDTO.setGroupWantJoins(filteredGroupWantJoins);
+                //userRepository.save(user);
+                return userDTO;
             } else {
-                throw new ForbiddenException("Essa solicitação já foi respondida.");
+                throw new ForbiddenException("O usuário não tem solcitação em WAITING com este grupo!");
             }
         } else {
-            throw new ForbiddenException("Usuário não tem uma solicitação enviada para esse grupo.");
+            throw new ForbiddenException("O usuário não tem nenhuma solicitação ativa!");
         }
+
     }
+
 }
