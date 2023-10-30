@@ -64,14 +64,10 @@ public class GroupController {
             List<RelationshipGroupWantJoin> groupWantJoins = userDTO.getGroupWantJoins();
             List<RelationshipGroupWantJoin> filteredGroupWantJoins = new ArrayList<>();
             for (RelationshipGroupWantJoin groupWantJoin : groupWantJoins) {
-//                if (!userDTO.getGroupWantJoins().isEmpty()) {
-//                    RelationshipGroupWantJoin userGroupWantJoin = userDTO.getGroupWantJoins().get(0);
-//                    userGroupWantJoin.setStatus(JoinGroupStatusEnum.ACCEPTED);
-//                    relationJoinRepository.save(user);
-//                }
                 if (JoinGroupStatusEnum.WAITING.equals(groupWantJoin.getStatus()) && groupId.equals(groupWantJoin.getGroup().getId())) {
-                    groupWantJoin.setStatus(JoinGroupStatusEnum.WAITING);
+                    groupWantJoin.setStatus(JoinGroupStatusEnum.ACCEPTED);
                     filteredGroupWantJoins.add(groupWantJoin);
+                    relationJoinRepository.save(user);
                 }
             }
             userDTO.setGroupWantJoins(filteredGroupWantJoins);
