@@ -1,5 +1,6 @@
 package com.donation1618.donation.repository;
 
+import com.donation1618.donation.domain.entities.RelationshipGroupMemberOf;
 import com.donation1618.donation.domain.entities.RelationshipGroupWantJoin;
 import com.donation1618.donation.domain.entities.User;
 import com.donation1618.donation.domain.entities.enums.JoinGroupStatusEnum;
@@ -35,4 +36,6 @@ public interface UserRepository extends Neo4jRepository<User, UUID> {
             "WHERE r.relationId = $relationId " +
             "RETURN r LIMIT 1")
     RelationshipGroupWantJoin findByRelationId(String relationId);
+    @Query("MATCH (user:User {id: $userId})-[relationship:MEMBER_OF]->(group:Group {id: $groupId}) RETURN relationship as MEMBER_OF")
+    List<RelationshipGroupMemberOf> findRelationshipsByUserIdAndGroupId(UUID userId, UUID groupId);
 }

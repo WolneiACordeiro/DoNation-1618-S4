@@ -22,15 +22,6 @@ import java.util.UUID;
 @RequestMapping("/groups")
 public class GroupController {
     private final GroupService groupService;
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private UserRepository relationJoinRepository;
-
-
-    public void RelationshipGroupController(UserRepository relationJoinRepository) {
-        this.relationJoinRepository = relationJoinRepository;
-    }
 
     @Autowired
     public GroupController(GroupService groupService) {

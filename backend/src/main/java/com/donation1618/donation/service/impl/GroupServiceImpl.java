@@ -77,13 +77,15 @@ public class GroupServiceImpl implements GroupService {
             List<RelationshipGroupWantJoin> filteredGroupWantJoins = new ArrayList<>();
             for (RelationshipGroupWantJoin groupWantJoin : groupWantJoins) {
                 if (JoinGroupStatusEnum.WAITING.equals(groupWantJoin.getStatus()) && groupId.equals(groupWantJoin.getGroup().getId())) {
+                    RelationshipGroupMemberOf relationship = new RelationshipGroupMemberOf(UUID.randomUUID(), GroupHierarchyEnum.MEMBER, group);
                     groupWantJoin.setStatus(JoinGroupStatusEnum.ACCEPTED);
                     filteredGroupWantJoins.add(groupWantJoin);
+                    user.addGroupMembership(relationship);
                 }
             }
             if(!filteredGroupWantJoins.isEmpty()){
                 userDTO.setGroupWantJoins(filteredGroupWantJoins);
-                //userRepository.save(user);
+                userRepository.save(user);
                 return userDTO;
             } else {
                 throw new ForbiddenException("O usuário não tem solcitação em WAITING com este grupo!");
