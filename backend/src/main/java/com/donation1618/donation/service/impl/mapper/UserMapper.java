@@ -26,6 +26,8 @@ public class UserMapper {
         userDTO.setEmail(user.getEmail());
         userDTO.setPassword(user.getPassword());
         userDTO.setRoles(user.getRoles());
+        userDTO.setGroupWantJoins(user.getGroupWantJoins());
+        userDTO.setGroupMemberships(user.getGroupMemberships());
         return userDTO;
     }
     public UserRelationsDTO entityOnlyRelationsDto(User user) {

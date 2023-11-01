@@ -9,7 +9,6 @@ import com.donation1618.donation.domain.entities.User;
 import com.donation1618.donation.domain.entities.enums.GroupHierarchyEnum;
 import com.donation1618.donation.domain.entities.enums.JoinGroupStatusEnum;
 import com.donation1618.donation.repository.GroupRepository;
-import com.donation1618.donation.repository.RelationshipGroupWantJoinRepository;
 import com.donation1618.donation.repository.UserRepository;
 import com.donation1618.donation.service.GroupService;
 import com.donation1618.donation.service.exceptions.ForbiddenException;
@@ -29,7 +28,7 @@ public class GroupServiceImpl implements GroupService {
     private final GroupMapper groupMapper;
     private final UserMapper userMapper;
     @Autowired
-    public GroupServiceImpl(GroupRepository groupRepository, UserRepository userRepository, GroupMapper groupMapper, UserMapper userMapper, RelationshipGroupWantJoinRepository relationJoinRepository) {
+    public GroupServiceImpl(GroupRepository groupRepository, UserRepository userRepository, GroupMapper groupMapper, UserMapper userMapper) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
         this.groupMapper = groupMapper;
@@ -94,6 +93,11 @@ public class GroupServiceImpl implements GroupService {
             throw new ForbiddenException("O usuário não tem nenhuma solicitação ativa!");
         }
 
+    }
+
+    @Override
+    public List<GroupDTO> getAllGroups() {
+        return null;
     }
 
 }

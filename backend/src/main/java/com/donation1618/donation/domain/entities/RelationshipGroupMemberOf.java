@@ -16,7 +16,7 @@ import java.util.UUID;
 @RelationshipProperties
 public class RelationshipGroupMemberOf {
     @RelationshipId
-    private String id;
+    private String identity;
     private UUID relationId;
     private GroupHierarchyEnum role;
     @TargetNode
