@@ -1,7 +1,7 @@
 package com.donation1618.donation.domain.dto;
 
-import com.donation1618.donation.domain.entities.RelationshipGroupMemberOf;
-import com.donation1618.donation.domain.entities.RelationshipGroupWantJoin;
+import com.donation1618.donation.domain.entities.relations.RelationshipGroupMemberOf;
+import com.donation1618.donation.domain.entities.relations.RelationshipGroupWantJoin;
 import com.donation1618.donation.domain.entities.Role;
 import com.donation1618.donation.utils.validator.UniqueEmail;
 import jakarta.validation.constraints.Email;
@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

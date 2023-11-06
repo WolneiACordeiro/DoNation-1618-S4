@@ -1,5 +1,6 @@
-package com.donation1618.donation.domain.entities;
+package com.donation1618.donation.domain.entities.relations;
 
+import com.donation1618.donation.domain.entities.Group;
 import com.donation1618.donation.domain.entities.enums.GroupHierarchyEnum;
 import lombok.Data;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @RelationshipProperties
 public class RelationshipGroupMemberOf {
     @RelationshipId
-    private String identity;
+    private Long identity;
     private UUID relationId;
     private GroupHierarchyEnum role;
     @TargetNode

@@ -1,12 +1,12 @@
 package com.donation1618.donation.domain.entities;
 
+import com.donation1618.donation.domain.entities.relations.RelationshipGroupMemberOf;
+import com.donation1618.donation.domain.entities.relations.RelationshipGroupWantJoin;
 import lombok.*;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +27,10 @@ public class User {
     private List<RelationshipGroupMemberOf> groupMemberships = new ArrayList<>();
     @Relationship(type = "WANT_JOIN", direction = Relationship.Direction.OUTGOING)
     private List<RelationshipGroupWantJoin> groupWantJoins = new ArrayList<>();
+    @Relationship(type = "MAKE_DONATION", direction = Relationship.Direction.OUTGOING)
+    private List<Donation> userMakeDonation = new ArrayList<>();
+    @Relationship(type = "WANT_DONATION", direction = Relationship.Direction.INCOMING)
+    private List<Donation> userWantDonation = new ArrayList<>();
     public void addGroupMembership(RelationshipGroupMemberOf membership) {
             groupMemberships.add(membership);
     }

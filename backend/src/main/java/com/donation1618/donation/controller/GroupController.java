@@ -1,22 +1,15 @@
 package com.donation1618.donation.controller;
 
 import com.donation1618.donation.domain.dto.GroupDTO;
-import com.donation1618.donation.domain.dto.UserDTO;
 import com.donation1618.donation.domain.dto.UserRelationsDTO;
-import com.donation1618.donation.domain.entities.RelationshipGroupWantJoin;
-import com.donation1618.donation.domain.entities.User;
-import com.donation1618.donation.domain.entities.enums.JoinGroupStatusEnum;
-import com.donation1618.donation.repository.UserRepository;
+import com.donation1618.donation.domain.entities.relations.RelationshipGroupWantJoin;
 import com.donation1618.donation.service.GroupService;
-import com.donation1618.donation.service.impl.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController

@@ -1,9 +1,8 @@
 package com.donation1618.donation.service;
 
 import com.donation1618.donation.domain.dto.GroupDTO;
-import com.donation1618.donation.domain.dto.UserDTO;
 import com.donation1618.donation.domain.dto.UserRelationsDTO;
-import com.donation1618.donation.domain.entities.RelationshipGroupWantJoin;
+import com.donation1618.donation.domain.entities.relations.RelationshipGroupWantJoin;
 
 import java.util.List;
 import java.util.UUID;

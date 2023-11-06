@@ -3,8 +3,8 @@ package com.donation1618.donation.service.impl;
 import com.donation1618.donation.domain.dto.GroupDTO;
 import com.donation1618.donation.domain.dto.UserRelationsDTO;
 import com.donation1618.donation.domain.entities.Group;
-import com.donation1618.donation.domain.entities.RelationshipGroupMemberOf;
-import com.donation1618.donation.domain.entities.RelationshipGroupWantJoin;
+import com.donation1618.donation.domain.entities.relations.RelationshipGroupMemberOf;
+import com.donation1618.donation.domain.entities.relations.RelationshipGroupWantJoin;
 import com.donation1618.donation.domain.entities.User;
 import com.donation1618.donation.domain.entities.enums.GroupHierarchyEnum;
 import com.donation1618.donation.domain.entities.enums.JoinGroupStatusEnum;
@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -62,39 +63,30 @@ public class GroupServiceImpl implements GroupService {
             return relationship;
         }
     }
-
     @Override
     @Transactional
     public UserRelationsDTO acceptGroup(UUID groupId, UUID userId) {
-        Group group = groupRepository.findById(groupId).orElseThrow(() -> new ResourceNotFoundException("Grupo não encontrado com o ID: " + groupId));
-        Optional<User> userOptional = Optional.ofNullable(userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com o ID: " + userId)));
-
-        User user = userOptional.get();
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new ResourceNotFoundException("Grupo não encontrado com o ID: " + groupId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com o ID: " + userId));
         UserRelationsDTO userDTO = userMapper.entityOnlyRelationsDto(user);
         List<RelationshipGroupWantJoin> groupWantJoins = userDTO.getGroupWantJoins();
-        if(!groupWantJoins.isEmpty()){
-            List<RelationshipGroupWantJoin> filteredGroupWantJoins = new ArrayList<>();
-            for (RelationshipGroupWantJoin groupWantJoin : groupWantJoins) {
-                if (JoinGroupStatusEnum.WAITING.equals(groupWantJoin.getStatus()) && groupId.equals(groupWantJoin.getGroup().getId())) {
-                    RelationshipGroupMemberOf relationship = new RelationshipGroupMemberOf(UUID.randomUUID(), GroupHierarchyEnum.MEMBER, group);
-                    groupWantJoin.setStatus(JoinGroupStatusEnum.ACCEPTED);
-                    filteredGroupWantJoins.add(groupWantJoin);
-                    user.addGroupMembership(relationship);
-                }
-            }
-            if(!filteredGroupWantJoins.isEmpty()){
-                userDTO.setGroupWantJoins(filteredGroupWantJoins);
-                userRepository.save(user);
-                return userDTO;
-            } else {
-                throw new ForbiddenException("O usuário não tem solcitação em WAITING com este grupo!");
-            }
-        } else {
-            throw new ForbiddenException("O usuário não tem nenhuma solicitação ativa!");
+        List<RelationshipGroupWantJoin> filteredGroupWantJoins = groupWantJoins.stream()
+                .filter(groupWantJoin -> JoinGroupStatusEnum.WAITING.equals(groupWantJoin.getStatus()) && groupId.equals(groupWantJoin.getGroup().getId()))
+                .collect(Collectors.toList());
+        if (filteredGroupWantJoins.isEmpty()) {
+            throw new ForbiddenException("O usuário não tem solicitação em WAITING com este grupo!");
         }
-
+        filteredGroupWantJoins.forEach(groupWantJoin -> {
+            RelationshipGroupMemberOf relationship = new RelationshipGroupMemberOf(UUID.randomUUID(), GroupHierarchyEnum.MEMBER, group);
+            groupWantJoin.setStatus(JoinGroupStatusEnum.ACCEPTED);
+            user.addGroupMembership(relationship);
+        });
+        userDTO.setGroupWantJoins(filteredGroupWantJoins);
+        userRepository.save(user);
+        return userDTO;
     }
-
     @Override
     public List<GroupDTO> getAllGroups() {
         return null;

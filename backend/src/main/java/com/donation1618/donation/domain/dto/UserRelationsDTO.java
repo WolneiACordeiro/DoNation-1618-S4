@@ -1,10 +1,6 @@
 package com.donation1618.donation.domain.dto;
 
-import com.donation1618.donation.domain.entities.RelationshipGroupWantJoin;
-import com.donation1618.donation.domain.entities.Role;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import com.donation1618.donation.domain.entities.relations.RelationshipGroupWantJoin;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
