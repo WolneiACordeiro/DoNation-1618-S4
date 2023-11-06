@@ -16,7 +16,7 @@ import java.util.UUID;
 public class GroupDTO {
     private UUID id;
     private String name;
-    @Relationship(type = "HAVE_DONATION", direction = Relationship.Direction.OUTGOING)
+    @Relationship(type = "HAVE_DONATION", direction = Relationship.Direction.INCOMING)
     private List<Donation> groupHaveDonation = new ArrayList<>();
     public GroupDTO() {
         this.id = UUID.randomUUID();

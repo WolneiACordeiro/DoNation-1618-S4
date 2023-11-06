@@ -20,7 +20,7 @@ public class Group {
     @Id
     private UUID id;
     private String name;
-    @Relationship(type = "HAVE_DONATION", direction = Relationship.Direction.OUTGOING)
+    @Relationship(type = "HAVE_DONATION", direction = Relationship.Direction.INCOMING)
     private List<Donation> groupHaveDonation = new ArrayList<>();
     public Group() {
         this.id = UUID.randomUUID();

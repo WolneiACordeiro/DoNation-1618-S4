@@ -10,15 +10,15 @@ public class DonationMapper {
         DonationDTO donationDTO = new DonationDTO();
         donationDTO.setId(donation.getId());
         donationDTO.setTitle(donation.getTitle());
-        donationDTO.setDescription(donationDTO.getDescription());
-        donationDTO.setCreateAt(donationDTO.getCreateAt());
+        donationDTO.setDescription(donation.getDescription());
+        donationDTO.setCreateAt(donation.getCreateAt());
         return donationDTO;
     }
     public Donation dtoToEntity(DonationDTO donationDTO) {
         Donation donation = new Donation();
         donation.setTitle(donationDTO.getTitle());
-        donation.setDescription(donation.getDescription());
-        donation.setCreateAt(donation.getCreateAt());
+        donation.setDescription(donationDTO.getDescription());
+        donation.setCreateAt(donationDTO.getCreateAt());
         return donation;
     }
 }

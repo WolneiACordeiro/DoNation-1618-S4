@@ -29,8 +29,8 @@ public class User {
     private List<RelationshipGroupWantJoin> groupWantJoins = new ArrayList<>();
     @Relationship(type = "MAKE_DONATION", direction = Relationship.Direction.OUTGOING)
     private List<Donation> userMakeDonation = new ArrayList<>();
-    @Relationship(type = "WANT_DONATION", direction = Relationship.Direction.INCOMING)
-    private List<Donation> userWantDonation = new ArrayList<>();
+    @Relationship(type = "WANT_DONATION", direction = Relationship.Direction.OUTGOING)
+    private List<DonationRequest> userWantDonation = new ArrayList<>();
     public void addGroupMembership(RelationshipGroupMemberOf membership) {
             groupMemberships.add(membership);
     }

@@ -1,30 +1,25 @@
-package com.donation1618.donation.domain.entities;
+package com.donation1618.donation.domain.dto;
 
+import com.donation1618.donation.domain.entities.enums.DonationRequestEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
-@Node("Donation")
-public class Donation {
-    @Id
+public class DonationRequestDTO {
     private UUID id;
     private String title;
     private String description;
+    private DonationRequestEnum status;
     private LocalDateTime createAt;
-    @Relationship(type = "HAVE_REQUEST", direction = Relationship.Direction.INCOMING)
-    private List<DonationRequest> donationHaveRequest = new ArrayList<>();
-    public Donation() {
+    public DonationRequestDTO() {
         this.id = UUID.randomUUID();
         this.createAt = LocalDateTime.now();
     }
