@@ -1,1 +1,3 @@
 MATCH (n) DETACH DELETE n;
+MATCH (n) OPTIONAL MATCH (n)-[r]-(m) RETURN n, r, m;
+

@@ -20,4 +20,7 @@ public interface UserRepository extends Neo4jRepository<User, UUID> {
             "LIMIT 1 " +
             "RETURN properties(r).status AS status")
     String findMostRecentWantJoinStatus(UUID userId, UUID groupId);
+    @Query("MATCH (donation:Donation {id: $donationId})<-[:MAKE_DONATION]-(user:User)" +
+            "RETURN user.id")
+    String findUserIdByDonationId(UUID donationId);
 }
