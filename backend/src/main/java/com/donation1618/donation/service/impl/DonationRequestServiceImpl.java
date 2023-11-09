@@ -53,7 +53,7 @@ public class DonationRequestServiceImpl implements DonationRequestService {
         User donator = userRepository.findById(UUID.fromString(donatorId)).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com o ID: " + donatorId));
         DonationRequest donationRequest = donationRequestMapper.dtoToEntity(donationRequestDTO);
         donationRequest.setStatus(DonationRequestEnum.WAITING);
-        donationRequest.setTitle(user.getUsername() + " quer " + donator.getUsername());
+        donationRequest.setTitle(user.getUsername() + " quer " + donation.getTitle() + " de " + donator.getUsername());
         donation.setDonationHaveRequest(Collections.singletonList(donationRequest));
         user.setUserWantDonation(Collections.singletonList(donationRequest));
         donationRepository.save(donation);
